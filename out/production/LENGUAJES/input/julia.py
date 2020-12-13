@@ -1,8 +1,11 @@
-a=9823
-if b>20:
-    a = 20
-    total = 231233 * 0.95
+def funct():
+    a=3
+    b=4
 
-else:
-    a = 20
-    total = -122  * 0.98
+print(2)
+a=1
+for i in range(4):
+    a=3
+    print(f)
+
+

@@ -18,6 +18,11 @@ public class SmellUselessVariables implements Smeller {
                 variables_not_used.add(variable);
         }
 
+        for(String aux : variables_not_used){
+            System.out.println(aux);
+        }
+        System.out.println("Variables no usadas");
+
         VisitorCodeWithoutVaribleAsignations final_text = new VisitorCodeWithoutVaribleAsignations(tree,variables_not_used);
 
         return final_text.final_text;

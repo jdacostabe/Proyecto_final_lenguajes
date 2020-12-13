@@ -23,12 +23,27 @@ public class VisitorUsedVariable<T> extends Python3BaseVisitor<T> {
             Boolean isLeftPart = false;
             RuleContext parent = ctx.parent;
             while(!isLeftPart && !parent.getClass().equals(Python3Parser.File_inputContext.class)){
+
+                if(parent.getClass().equals(Python3Parser.ComparisonContext.class) && ((Python3Parser.ComparisonContext) parent).comp_op().size()!=0){
+                    break;
+                }
+
                 if(parent.getClass().equals(Python3Parser.Expr_stmtContext.class)){
                     Python3Parser.Expr_stmtContext expr_stmt_ctx = (Python3Parser.Expr_stmtContext) parent;
 
-                    for (Python3Parser.TestContext left_variable_name:expr_stmt_ctx.testlist_star_expr(0).test())
-                        if(left_variable_name.getText().equals(variable_name))
+                    for (Python3Parser.TestContext left_variable_name:expr_stmt_ctx.testlist_star_expr(0).test()) {
+                        if (left_variable_name.getText().equals(variable_name)) {
                             isLeftPart = true;
+                        }
+                    }
+
+                    while(!parent.getClass().equals(Python3Parser.File_inputContext.class)){
+                        if(parent.parent.getClass().equals(Python3Parser.Compound_stmtContext.class) && parent.getClass().equals(Python3Parser.FuncdefContext.class)){
+                            isLeftPart = true;
+                            break;
+                        }
+                        parent = parent.parent;
+                    }
                     break;
                 }
                 parent = parent.parent;

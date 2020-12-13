@@ -13,6 +13,8 @@ public class VisitorCodeWithoutVaribleAsignations<T> extends Python3BaseVisitor<
     String final_text;
     String line_text;
     int line;
+    String indent;
+    boolean inCompound;
 
     public VisitorCodeWithoutVaribleAsignations(ParseTree tree, HashSet<String> variables_name){
         this.tree = tree;
@@ -20,20 +22,23 @@ public class VisitorCodeWithoutVaribleAsignations<T> extends Python3BaseVisitor<
         this.final_text = "";
         this.line = 1;
         this.line_text="";
+        this.indent="";
         this.visit(this.tree);
     }
 
     @Override public T visitStmt(Python3Parser.StmtContext ctx) {
+
+        if(ctx.compound_stmt() != null && ctx.compound_stmt().funcdef() == null){
+            return visitChildren(ctx);
+        }
 
         if( ctx.simple_stmt() != null &&
             ctx.simple_stmt().small_stmt() != null &&
             ctx.simple_stmt().small_stmt().get(0) != null &&
             ctx.simple_stmt().small_stmt().get(0).expr_stmt() != null && (
             ctx.simple_stmt().small_stmt().get(0).expr_stmt().ASSIGN().size() > 0 ||
-            ctx.simple_stmt().small_stmt().get(0).expr_stmt().augassign() != null
-            )
+            ctx.simple_stmt().small_stmt().get(0).expr_stmt().augassign() != null )
           ){
-
             Python3Parser.Expr_stmtContext expr_stmtContext = ctx.simple_stmt().small_stmt().get(0).expr_stmt();
             Python3Parser.Testlist_star_exprContext variable_list = expr_stmtContext.testlist_star_expr(0);
 
@@ -57,12 +62,16 @@ public class VisitorCodeWithoutVaribleAsignations<T> extends Python3BaseVisitor<
 
             if(!left_part.equals("")){
                 line_text="";
-                final_text = final_text + left_part + center_part + right_part +"\n";
+                final_text = final_text + indent + left_part + center_part + right_part +"\n";
             }
             line++;
         }
         else{
-            print_code(ctx);
+            if(!indent.equals("")){
+                final_text = final_text + indent + ctx.getText().trim() + "\n";
+            }else{
+                print_code(ctx);
+            }
         }
 
         return null;
@@ -71,7 +80,6 @@ public class VisitorCodeWithoutVaribleAsignations<T> extends Python3BaseVisitor<
     private void print_code(ParserRuleContext ruleContext){
         for (int i=0; i<ruleContext.getChildCount(); i++) {
             if(ruleContext.getChild(i).getClass().equals(TerminalNodeImpl.class)){
-
                 TerminalNodeImpl terminalNode = (TerminalNodeImpl) ruleContext.getChild(i);
 
                 int line_terminal = terminalNode.symbol.getLine();
@@ -88,7 +96,7 @@ public class VisitorCodeWithoutVaribleAsignations<T> extends Python3BaseVisitor<
                     line_text = line_text + " ";
                 }
 
-                line_text = line_text+terminalNode.symbol.getText().trim();
+                line_text = line_text + terminalNode.symbol.getText().trim();
             }
             else {
                 print_code((ParserRuleContext) ruleContext.getChild(i));
@@ -96,5 +104,66 @@ public class VisitorCodeWithoutVaribleAsignations<T> extends Python3BaseVisitor<
         }
     }
 
+    @Override public T visitIf_stmt(Python3Parser.If_stmtContext ctx) {
+        boolean print = true;
+        for(int i=0; i<ctx.getChildCount(); i++){
+            if(print){
+                if(ctx.getChild(i).getText().equals(":")){
+                    final_text = final_text.substring(0,final_text.length()-1) + ":\n";
+                    print = false;
+                    line++;
+                }else {
+                    final_text = final_text + ctx.getChild(i).getText() + " ";
+                }
+            }else{
+                indent = "    ";
+                visit(ctx.getChild(i));
+                print = true;
+                indent = "";
+            }
+        }
+        return null;
+    }
 
+    @Override public T visitWhile_stmt(Python3Parser.While_stmtContext ctx) {
+        boolean print = true;
+        for(int i=0; i<ctx.getChildCount(); i++){
+            if(print){
+                if(ctx.getChild(i).getText().equals(":")){
+                    final_text = final_text.substring(0,final_text.length()-1) + ":\n";
+                    print = false;
+                    line++;
+                }else {
+                    final_text = final_text + ctx.getChild(i).getText() + " ";
+                }
+            }else{
+                indent = "    ";
+                visit(ctx.getChild(i));
+                print = true;
+                indent = "";
+            }
+        }
+        return null;
+    }
+
+    @Override public T visitFor_stmt(Python3Parser.For_stmtContext ctx) {
+        boolean print = true;
+        for(int i=0; i<ctx.getChildCount(); i++){
+            if(print){
+                if(ctx.getChild(i).getText().equals(":")){
+                    final_text = final_text.substring(0,final_text.length()-1) + ":\n";
+                    print = false;
+                    line++;
+                }else {
+                    final_text = final_text + ctx.getChild(i).getText() + " ";
+                }
+            }else{
+                indent = "    ";
+                visit(ctx.getChild(i));
+                print = true;
+                indent = "";
+            }
+        }
+        return null;
+    }
 }
