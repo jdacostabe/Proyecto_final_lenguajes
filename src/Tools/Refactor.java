@@ -33,7 +33,7 @@ public class Refactor {
 
             String refactored_code = smeller.fix(tree);
 
-            System.out.println("EMPIEZA");
+
             System.out.println(refactored_code);
         }
 

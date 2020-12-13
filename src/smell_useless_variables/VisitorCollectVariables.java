@@ -13,6 +13,8 @@ public class VisitorCollectVariables<T> extends Python3BaseVisitor<T> {
         this.visit(this.tree);
     }
 
+
+
     public HashSet<String> getVariablesAssigned(){
         return variables_assigned;
     }

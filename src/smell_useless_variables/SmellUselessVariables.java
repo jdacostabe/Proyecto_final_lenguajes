@@ -1,6 +1,5 @@
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import java.util.HashMap;
 import java.util.HashSet;
 
 public class SmellUselessVariables implements Smeller {
@@ -12,16 +11,15 @@ public class SmellUselessVariables implements Smeller {
 
         HashSet<String> variables_not_used = new HashSet<>();
 
+
+
         for (String variable: variables_in_code) {
             VisitorUsedVariable visitor_used_variable = new VisitorUsedVariable(tree, variable);
             if(!visitor_used_variable.is_used)
                 variables_not_used.add(variable);
         }
 
-        for(String aux : variables_not_used){
-            System.out.println(aux);
-        }
-        System.out.println("Variables no usadas");
+
 
         VisitorCodeWithoutVaribleAsignations final_text = new VisitorCodeWithoutVaribleAsignations(tree,variables_not_used);
 

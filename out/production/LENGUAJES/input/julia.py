@@ -1,11 +1,13 @@
-def funct():
-    a=3
-    b=4
+a,d=2,3
+b=c
+c=23
+print(a)
 
-print(2)
-a=1
-for i in range(4):
-    a=3
-    print(f)
+if True:
+    print(a)
+
+
+
+
 
 
