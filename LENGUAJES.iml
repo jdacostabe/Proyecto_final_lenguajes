@@ -10,6 +10,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/smell_useless_variables" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/smell_duplicated_code" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/Tools" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/smell_useless_parameters" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="13 (2)" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
