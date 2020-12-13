@@ -1,0 +1,97 @@
+def funct():
+    a=3
+    b=4
+
+print(2)
+a,b,d=1,2*85*544,2
+c = a*3
+
+for i in range(b):
+    prueba(b,b)
+    print(b)
+
+print(b)
+
+
+
+a=9823
+if b>20:
+    a = 20
+    total = 231233 * 0.95
+
+else:
+    a = 20
+    total = -122  * 0.98
+
+
+
+
+
+a=9823
+b=3
+if b>20:
+    x = a
+    print(a)
+    print(x)
+    totali = 231233 * 0.95
+
+else:
+    a = 20
+    total = -122  * 0.98
+
+
+
+
+
+
+a=9823
+
+def funct():
+    a = 3
+    print(a)
+
+b=9823
+
+if b>20:
+    a = 20
+    print(a)
+    total = 231233 * 0.95
+elif b>3:
+    print(hola)
+    print(z)
+else:
+    a = 20
+    total = -122  * 0.98
+    print(b)
+
+print(total)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def funct():
+    a=3
+    b=4
+
+print(2)
+a,b,d=1,2*85*544,2
+c = a*3
+
+for i in range(4):
+    a=3
+    print(f)
+    
+    
+    
+
+    

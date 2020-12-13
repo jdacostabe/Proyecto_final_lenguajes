@@ -113,13 +113,16 @@ public class VisitorCodeWithoutVaribleAsignations<T> extends Python3BaseVisitor<
                     print = false;
                     line++;
                 }else {
-                    final_text = final_text + ctx.getChild(i).getText() + " ";
+                    if((ctx.getChild(i).getText().equals("if")||ctx.getChild(i).getText().equals("elif")||ctx.getChild(i).getText().equals("else"))){
+                        final_text =  final_text + indent;
+                    }
+                    final_text =  final_text + ctx.getChild(i).getText() + " ";
                 }
             }else{
-                indent = "    ";
+                indent = indent + "    ";
                 visit(ctx.getChild(i));
                 print = true;
-                indent = "";
+                indent = indent.substring(0,indent.length()-4);
             }
         }
         return null;
