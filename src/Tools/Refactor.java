@@ -19,6 +19,7 @@ public class Refactor {
         this.file_name = file_name;
         this.smellers = new ArrayList<>();
         this.smellers.add(new SmellUselessVariables());
+        this.smellers.add(new SmellUselessParameters());
 
     }
 

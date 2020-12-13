@@ -18,8 +18,7 @@ public class SmellUselessVariables implements Smeller {
             VisitorUsedVariable visitor_used_variable = new VisitorUsedVariable(tree, variable);
             if(!visitor_used_variable.is_used)
                 variables_not_used.add(variable);
-            if(visitor_used_variable.unused_definitions > 0)
-                used_definitions.put(variable,visitor_used_variable.used_definitions);
+            used_definitions.put(variable,visitor_used_variable.used_definitions);
         }
 
 
