@@ -9,12 +9,16 @@ public class VisitorUsedVariable<T> extends Python3BaseVisitor<T> {
     String variable_name;
     Boolean is_used;
     Boolean is_defined;
+    int used_definitions;
+    int unused_definitions;
 
     public VisitorUsedVariable(ParseTree tree, String variable_name){
-        this.tree           = tree;
-        this.variable_name  = variable_name;
-        this.is_used        = false;
-        this.is_defined     = false;
+        this.tree               = tree;
+        this.variable_name      = variable_name;
+        this.is_used            = false;
+        this.is_defined         = false;
+        this.used_definitions   = 0;
+        this.unused_definitions = 0;
         this.visit(this.tree);
     }
 
@@ -36,6 +40,7 @@ public class VisitorUsedVariable<T> extends Python3BaseVisitor<T> {
                         if (left_variable_name.getText().equals(variable_name)) {
                             isLeftPart = true;
                             this.is_defined = true;
+                            this.unused_definitions++;
                         }
                     }
 
@@ -53,6 +58,8 @@ public class VisitorUsedVariable<T> extends Python3BaseVisitor<T> {
 
             if(!isLeftPart && this.is_defined){
                 this.is_used = true;
+                this.used_definitions = this.used_definitions + this.unused_definitions;
+                this.unused_definitions = 0;
                 return null;
             }
         }

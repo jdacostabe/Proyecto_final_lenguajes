@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 import java.security.spec.RSAOtherPrimeInfo;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class VisitorCodeWithoutVaribleAsignations<T> extends Python3BaseVisitor<T> {
@@ -15,14 +16,16 @@ public class VisitorCodeWithoutVaribleAsignations<T> extends Python3BaseVisitor<
     int line;
     String indent;
     boolean inCompound;
+    HashMap<String, Integer> used_definitions;
 
-    public VisitorCodeWithoutVaribleAsignations(ParseTree tree, HashSet<String> variables_name){
+    public VisitorCodeWithoutVaribleAsignations(ParseTree tree, HashSet<String> variables_name, HashMap<String, Integer> used_definitions){
         this.tree = tree;
         this.variables_name = variables_name;
         this.final_text = "";
         this.line = 1;
         this.line_text="";
         this.indent="";
+        this.used_definitions = used_definitions;
         this.visit(this.tree);
     }
 
@@ -49,7 +52,9 @@ public class VisitorCodeWithoutVaribleAsignations<T> extends Python3BaseVisitor<
             for (int i=0; i<variable_list.test().size(); i++) {
                 Python3Parser.TestContext variable_in_expre = variable_list.test(i);
 
-                if(!variables_name.contains(variable_in_expre.getText())){
+
+
+                if(!variables_name.contains(variable_in_expre.getText()) && used_definitions.get(variable_in_expre.getText()) > 0){
                     left_part = (left_part.equals("")) ? variable_in_expre.getText() : left_part+","+variable_in_expre.getText();
 
                     if(center_part.equals("=")){
@@ -57,6 +62,10 @@ public class VisitorCodeWithoutVaribleAsignations<T> extends Python3BaseVisitor<
                     }else{
                         right_part = (right_part.equals("")) ? expr_stmtContext.testlist().test(i).getText() : right_part + "," + expr_stmtContext.testlist().test(i).getText();
                     }
+                }
+
+                if(used_definitions.get(variable_in_expre.getText())!= null){
+                    used_definitions .replace(variable_in_expre.getText(), used_definitions.get(variable_in_expre.getText()) -1);
                 }
             }
 
