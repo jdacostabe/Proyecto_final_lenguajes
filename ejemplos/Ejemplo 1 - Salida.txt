@@ -1,0 +1,8 @@
+estudiante_1="Camilo"
+estudiante_3="David"
+tarea_1,tarea_3="Imprimir Codigo","Presentacion"
+
+print(estudiante_1 + ": " +tarea_1)
+print(estudiante_3 + ": " +tarea_3)
+
+
