@@ -22,7 +22,6 @@ public class SmellUselessVariables implements Smeller {
         }
 
 
-
         VisitorCodeWithoutVaribleAsignations final_text = new VisitorCodeWithoutVaribleAsignations(tree,variables_not_used, used_definitions);
 
         return final_text.final_text;

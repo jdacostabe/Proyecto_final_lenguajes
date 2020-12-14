@@ -134,7 +134,7 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
 
                     for (int i=0; i<variable_list.test().size(); i++) {
                         Python3Parser.TestContext variable_in_expre = variable_list.test(i);
-
+                        
                         if(this.actual_parameters_useless.size()!=0 && this.used_parameters.get(this.actual_function).get(variable_in_expre.getText())!=null && this.used_parameters.get(this.actual_function).get(variable_in_expre.getText()) > 0){
                             if(!actual_parameters_useless.contains(variable_in_expre.getText())){
                                 left_part = (left_part.equals("")) ? variable_in_expre.getText() : left_part+","+variable_in_expre.getText();
@@ -153,7 +153,7 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
                                 this.used_parameters.get(this.actual_function).replace(variable_in_expre.getText(), this.used_parameters.get(this.actual_function).get(variable_in_expre.getText())-1);
                             }
 
-                        }else if(this.actual_variables_useless.size()!=0 && this.used_parameters.get(this.actual_function).get(variable_in_expre.getText())!=null && this.used_variables.get(this.actual_function).get(variable_in_expre.getText()) > 0){
+                        }else if(this.actual_variables_useless.size()!=0 && this.used_variables.get(this.actual_function).get(variable_in_expre.getText())!=null && this.used_variables.get(this.actual_function).get(variable_in_expre.getText()) > 0){
                             if(!actual_variables_useless.contains(variable_in_expre.getText())){
                                 left_part = (left_part.equals("")) ? variable_in_expre.getText() : left_part+","+variable_in_expre.getText();
 
@@ -170,7 +170,7 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
                                 }
                                 this.used_variables.get(this.actual_function).replace(variable_in_expre.getText(), this.used_variables.get(this.actual_function).get(variable_in_expre.getText())-1);
                             }
-                        }else{
+                        }else if(this.actual_parameters_useless.size()==0 && this.actual_variables_useless.size()==0){
                             left_part = (left_part.equals("")) ? variable_in_expre.getText() : left_part+","+variable_in_expre.getText();
                             if(center_part.equals("=")){
                                 right_part = (right_part.equals("")) ? expr_stmtContext.testlist_star_expr(1).test(i).getText() : right_part + "," + expr_stmtContext.testlist_star_expr(1).test(i).getText();
@@ -193,7 +193,6 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
                     final_text = final_text + "\n";
                 }
             }else{
-                System.out.println("Interno, pero no es nada:" + ctx.getText()); //--------------------------------------------------------------------------
                 print_code(ctx);
             }
         }else{

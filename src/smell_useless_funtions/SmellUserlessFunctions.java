@@ -18,7 +18,7 @@ public class SmellUserlessFunctions implements Smeller {
 
         VisitorFunctionPrinter final_text = new VisitorFunctionPrinter(tree,not_used);;
 
-        return final_text.final_text;
+        return final_text.final_text + "\n";
     }
 
 }

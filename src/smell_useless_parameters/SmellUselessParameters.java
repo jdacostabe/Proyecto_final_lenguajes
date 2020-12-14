@@ -29,18 +29,6 @@ public class SmellUselessParameters implements Smeller {
             parameters_not_used.put((String) key, parameters);
         });
 
-
-//        parameters_not_used.forEach((key, value) -> {
-//            System.out.println("Función: "+key+", Parametros: "+value.toString());;
-//        });
-
-//        used_parameters.forEach((key1, value1) -> {
-//            System.out.println("Función: "+key1);
-//            value1.forEach((key2, value2) -> {
-//                System.out.println("Variable: "+key2+", Numero de usos: "+value2.toString());;
-//            });
-//        });
-
         find_functions.internal_variables.forEach((key, value) -> {
             HashMap<String,Integer> used = new HashMap<>();
             ArrayList<String> variables = new ArrayList<>();
@@ -54,13 +42,7 @@ public class SmellUselessParameters implements Smeller {
             variables_not_used.put((String) key, variables);
         });
 
-//        variables_not_used.forEach((key, value) -> {
-//            System.out.println("Función: "+key+", Variables: "+value.toString());;
-//        });
-
         VisitorPrinter final_text = new VisitorPrinter(tree, parameters_not_used, used_parameters, variables_not_used, used_variables, all_parameters);
-
-//        VisitorCodeWithoutVaribleAsignations final_text = new VisitorCodeWithoutVaribleAsignations(tree,variables_not_used, used_definitions);
 
 
         return final_text.final_text;

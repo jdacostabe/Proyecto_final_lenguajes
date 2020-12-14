@@ -1,19 +1,12 @@
-def example(a,b,c):
-  c = a+b
-  a = a
-  return c
+def horas_trabajadas(temprano,medio_dia,tarde,noche):
+    primeras_horas=temprano+medio_dia
+    ultimas_horas=tarde+noche
+    noche=0
+    total=temprano+medio_dia+tarde
 
-def example2(a,b,c):
-  c = a+b
-  a = a
-  return c
+    return ultimas_horas
 
-example(1,2,3)
-example(4,5,6)
+a=2
 
-if (a > b):
-    b+3
-    print(a)
-else:
-    a=3
-
+horas_trabajadas(4,a,a,20)
+horas_trabajadas(a,1,5,0)
