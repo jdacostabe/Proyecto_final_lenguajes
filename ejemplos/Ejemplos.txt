@@ -91,6 +91,90 @@ for i in range(4):
     a=3
     print(f)
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+a,d=2,3
+b=c
+c=23
+
+print(a)
+if True:
+    print(a)
+    if True:
+        print(d)
+
+
+
+
+
+
+
+
+
+def example(abc, b, c):
+    abc = abc+b+4
+    b = 4
+    return abc
+
+def example2(d, e, f):
+    a = 3
+    b = d+e
+    print(a)
+    return c
+
+
+example(a,b,c)
+
+e = 4
+print(e)
+
+
+
+
+
+
+
+
+def example(abc, b, c, d, e):
+    e=e
+    abc = abc+b+4
+    c = 4
+    g = c
+    return abc
+
+def example2(d, e, f):
+    a = 3
+    b = d+e
+    print(a)
+    return c
+
+a = 3
+a = a
+print(a)
+
+example(a,b,c,d,e)
+fallo()
+
+e = 4
+
+
+
+
     
     
 

@@ -15,7 +15,6 @@ public class VisitorCodeWithoutVaribleAsignations<T> extends Python3BaseVisitor<
     String line_text;
     int line;
     String indent;
-    boolean inCompound;
     HashMap<String, Integer> used_definitions;
 
     public VisitorCodeWithoutVaribleAsignations(ParseTree tree, HashSet<String> variables_name, HashMap<String, Integer> used_definitions){
@@ -54,7 +53,7 @@ public class VisitorCodeWithoutVaribleAsignations<T> extends Python3BaseVisitor<
 
 
 
-                if(!variables_name.contains(variable_in_expre.getText()) && used_definitions.get(variable_in_expre.getText()) > 0){
+                if(!variables_name.contains(variable_in_expre.getText()) && used_definitions.get(variable_in_expre.getText()) > 0 && (center_part.equals("=") && !variable_in_expre.getText().equals(expr_stmtContext.testlist_star_expr(1).test(i).getText()))){
                     left_part = (left_part.equals("")) ? variable_in_expre.getText() : left_part+","+variable_in_expre.getText();
 
                     if(center_part.equals("=")){
