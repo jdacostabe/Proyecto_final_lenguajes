@@ -24,7 +24,9 @@ public class Refactor {
         this.smellers.add(new SmellUselessVariables());
         this.smellers.add(new SmellUselessParameters());
         this.smellers.add(new SmellUselessParameters());
-
+        this.smellers.add(new SmellUselessParameters());
+        this.smellers.add(new SmellUselessParameters());
+        this.smellers.add(new SmellUserlessFunctions());
     }
 
     public void codeRefactor() throws IOException {

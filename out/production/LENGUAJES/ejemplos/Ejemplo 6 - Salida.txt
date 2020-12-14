@@ -1,0 +1,8 @@
+def horas_trabajadas(temprano, medio_dia, tarde):
+
+    return temprano+medio_dia+tarde+3
+
+a=2
+
+horas_trabajadas(4,a,a)
+horas_trabajadas(a,1,5)
