@@ -1,4 +1,4 @@
-def horas_descansadas(temprano, medio_dia, tarde, noche):
+def horas_trabajadas(temprano, medio_dia, tarde, noche):
     primeras_horas=temprano+medio_dia
     ultimas_horas=tarde+noche
 
@@ -6,14 +6,6 @@ def horas_descansadas(temprano, medio_dia, tarde, noche):
     total=temprano+medio_dia+tarde
 
     return temprano+medio_dia+tarde+3
-
-
-def horas_trabajadas(temprano, medio_dia, tarde, noche):
-    temprano = 4
-    primeras_horas=temprano+medio_dia
-    ultimas_horas=tarde+noche
-
-    return primeras_horas+ultimas_horas
 
 a = 2
 

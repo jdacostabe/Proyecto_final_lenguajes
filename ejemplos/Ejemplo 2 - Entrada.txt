@@ -1,0 +1,21 @@
+usuario="administrador"
+print("El usuario es: " + usuario)
+print("Sus funciones son: ")
+
+if (usuario=="administrador"):
+    print(" -Leer Mensajes del Grupo")
+    print(" -Abandonar Grupo")
+    print(" -Eliminar Grupo")
+
+elif(usuario=="dueño"):
+    print(" -Leer Mensajes del Grupo")
+    print(" -Abandonar Grupo")
+    print(" -Eliminar Grupo")
+
+elif(usuario=="miembro"):
+    print(" -Leer Mensajes del Grupo")
+    print(" -Abandonar Grupo")
+
+else:
+    print(" -Solicitar acceso")
+

@@ -1,0 +1,16 @@
+edad=24
+
+print("Bienvenido")
+
+if (edad>50):
+    print("SALA 1")
+elif (edad>30):
+    print("SALA 2")
+elif (edad>18):
+    print("SALA 3")
+else:
+    print("Cualquier Sala")
+
+print("Disfruta")
+
+

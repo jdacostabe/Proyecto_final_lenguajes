@@ -5,7 +5,7 @@ def horas_trabajadas(temprano, medio_dia, tarde, noche):
     noche=0
     total=temprano+medio_dia+tarde
 
-    return temprano+medio_dia+tarde+3
+    return ultimas_horas
 
 a = 2
 

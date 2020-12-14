@@ -1,8 +1,9 @@
-def horas_trabajadas(temprano, medio_dia, tarde):
-
-    return temprano+medio_dia+tarde+3
+def horas_trabajadas(tarde, noche):
+    ultimas_horas=tarde+noche
+    return ultimas_horas
 
 a=2
 
-horas_trabajadas(4,a,a)
-horas_trabajadas(a,1,5)
+horas_trabajadas(a,20)
+horas_trabajadas(5,0)
+
