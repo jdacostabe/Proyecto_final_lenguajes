@@ -35,17 +35,7 @@ public class Refactor {
             String refactored_code = smeller.fix(tree);
 
             System.out.println(refactored_code);
+            System.out.println("------------Siguiente MAL OLOR------------");
         }
-
-
-
-//        try {
-//            FileWriter writer = new FileWriter(file_name);
-//            writer.write(final_text);
-//            writer.close();
-//        }catch(IOException e){
-//            System.out.println("An error occurred.");
-//            e.printStackTrace();
-//        }
     }
 }

@@ -1,5 +1,7 @@
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 public class VisitorUsedParameters<T> extends Python3BaseVisitor<T>  {
 
@@ -7,10 +9,10 @@ public class VisitorUsedParameters<T> extends Python3BaseVisitor<T>  {
     String variable_name;
     String actual_Function;
     String function;
+
     public boolean is_used;
-    boolean is_defined;
-    int used_definitions;
-    int unused_definitions;
+    boolean not_even_used;
+    int valid_uses;
 
     VisitorUsedParameters(ParseTree tree, String variable_name,String actual_Function){
         this.tree = tree;
@@ -18,6 +20,8 @@ public class VisitorUsedParameters<T> extends Python3BaseVisitor<T>  {
         this.actual_Function = actual_Function;
         this.function = "";
         this.is_used = false;
+        this.not_even_used = false;
+        this.valid_uses = 0;
         this.visit(this.tree);
     }
 
@@ -31,10 +35,10 @@ public class VisitorUsedParameters<T> extends Python3BaseVisitor<T>  {
     }
 
     @Override public T visitAtom(Python3Parser.AtomContext ctx) {
-        if(ctx.NAME() != null && ctx.getText().equals(variable_name) && actual_Function.equals(function)){
-            Boolean isLeftPart = false;
+        if(ctx.NAME() != null && ctx.getText().equals(variable_name) && actual_Function.equals(function) && !not_even_used){
+            Boolean useless = false;
             RuleContext parent = ctx.parent;
-            while(!isLeftPart && !parent.getClass().equals(Python3Parser.File_inputContext.class)){
+            while(!useless && !parent.getClass().equals(Python3Parser.File_inputContext.class)){
 
                 if(parent.getClass().equals(Python3Parser.ComparisonContext.class) && ((Python3Parser.ComparisonContext) parent).comp_op().size()!=0){
                     break;
@@ -43,11 +47,15 @@ public class VisitorUsedParameters<T> extends Python3BaseVisitor<T>  {
                 if(parent.getClass().equals(Python3Parser.Expr_stmtContext.class)){
                     Python3Parser.Expr_stmtContext expr_stmt_ctx = (Python3Parser.Expr_stmtContext) parent;
 
-                    for (Python3Parser.TestContext left_variable_name:expr_stmt_ctx.testlist_star_expr(0).test()) {
-                        if (left_variable_name.getText().equals(variable_name)) {
-                            isLeftPart = true;
-                            this.is_defined = true;
-                            this.unused_definitions++;
+                    for(int i=0;i<expr_stmt_ctx.testlist_star_expr(1).test().size();i++){
+                        //Si está a la izquierda y, esto se iguala por si mismo a la derecha o no se a usa si misma en la parte derecha
+                        if (expr_stmt_ctx.testlist_star_expr(0).test(i).getText().equals(variable_name)) {
+                            if(expr_stmt_ctx.testlist_star_expr(0).test(i).getText().equals(expr_stmt_ctx.testlist_star_expr(1).test(i).getText())){
+                                useless = true;
+                            }else if(!on_right(expr_stmt_ctx.testlist_star_expr(1).test(i))){
+                                this.not_even_used = true;
+                                return null;
+                            }
                         }
                     }
                     break;
@@ -55,14 +63,30 @@ public class VisitorUsedParameters<T> extends Python3BaseVisitor<T>  {
                 parent = parent.parent;
             }
 
-            if(!isLeftPart && this.is_defined){
+            if(!useless){
                 this.is_used = true;
-                this.used_definitions = this.used_definitions + this.unused_definitions;
-                this.unused_definitions = 0;
+                this.valid_uses++;
                 return null;
             }
         }
 
         return visitChildren(ctx);
+    }
+
+
+
+
+    private boolean on_right(ParserRuleContext ruleContext){
+        boolean res = false;
+        for (int i=0; i<ruleContext.getChildCount(); i++) {
+            if(ruleContext.getChild(i).getClass().equals(TerminalNodeImpl.class)){
+                res = res || ruleContext.getChild(i).getText().equals(variable_name);
+                break;
+            }
+            else {
+                res = res || on_right((ParserRuleContext) ruleContext.getChild(i));
+            }
+        }
+        return res;
     }
 }

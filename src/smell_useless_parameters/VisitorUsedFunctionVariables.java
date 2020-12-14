@@ -1,34 +1,36 @@
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import java.util.HashSet;
-
-public class VisitorUsedVariable<T> extends Python3BaseVisitor<T> {
-
+public class VisitorUsedFunctionVariables<T> extends Python3BaseVisitor<T> {
     ParseTree tree;
     String variable_name;
-    Boolean is_used;
-    Boolean is_defined;
+    String actual_Function;
+    String function;
+    public boolean is_used;
+    boolean is_defined;
     int used_definitions;
     int unused_definitions;
 
-    public VisitorUsedVariable(ParseTree tree, String variable_name){
-        this.tree               = tree;
-        this.variable_name      = variable_name;
-        this.is_used            = false;
-        this.is_defined         = false;
-        this.used_definitions   = 0;
-        this.unused_definitions = 0;
+    VisitorUsedFunctionVariables(ParseTree tree, String variable_name, String actual_Function){
+        this.tree = tree;
+        this.variable_name = variable_name;
+        this.actual_Function = actual_Function;
+        this.function = "";
+        this.is_used = false;
         this.visit(this.tree);
     }
 
     @Override public T visitFuncdef(Python3Parser.FuncdefContext ctx) {
+        if(this.actual_Function.equals(ctx.NAME().getText())){
+            function = actual_Function;
+            visitChildren(ctx);
+            function = "";
+        }
         return null;
     }
 
-
     @Override public T visitAtom(Python3Parser.AtomContext ctx) {
-        if(ctx.NAME() != null && ctx.getText().equals(this.variable_name)){
+        if(ctx.NAME() != null && ctx.getText().equals(variable_name) && actual_Function.equals(function)){
             Boolean isLeftPart = false;
             RuleContext parent = ctx.parent;
             while(!isLeftPart && !parent.getClass().equals(Python3Parser.File_inputContext.class)){
@@ -46,14 +48,6 @@ public class VisitorUsedVariable<T> extends Python3BaseVisitor<T> {
                             this.is_defined = true;
                             this.unused_definitions++;
                         }
-                    }
-
-                    while(!parent.getClass().equals(Python3Parser.File_inputContext.class)){
-                        if(parent.parent.getClass().equals(Python3Parser.Compound_stmtContext.class) && parent.getClass().equals(Python3Parser.FuncdefContext.class)){
-                            isLeftPart = true;
-                            break;
-                        }
-                        parent = parent.parent;
                     }
                     break;
                 }
