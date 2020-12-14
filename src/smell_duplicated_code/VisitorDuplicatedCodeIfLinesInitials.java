@@ -44,7 +44,11 @@ public class VisitorDuplicatedCodeIfLinesInitials<T> extends Python3BaseVisitor<
             if( (ctx.ELSE() != null )  && same_actual_line){
                 same_initial_lines++;
             }
+            else{
+                break;
+            }
         }
+
 
 
 
@@ -54,7 +58,7 @@ public class VisitorDuplicatedCodeIfLinesInitials<T> extends Python3BaseVisitor<
             visit(ctx.suite(0).stmt(i));
         }
         this.delete_blocks--;
-
+        final_text = final_text + "\n";
 
         //IMPRIMIENDO BLOQUE IF - SIN LINEAS INICIALES COMUNES
         boolean print_block_if;

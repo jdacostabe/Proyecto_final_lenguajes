@@ -22,6 +22,7 @@ public class VisitorDuplicatedCodeIfLinesFinals<T> extends Python3BaseVisitor<T>
         final_text = final_text + line_text;
 
     }
+
     @Override public T visitIf_stmt(Python3Parser.If_stmtContext ctx) {
         //CONTANDO LINEAS FINALES COMUNES
         int same_final_lines = 0;
@@ -122,12 +123,13 @@ public class VisitorDuplicatedCodeIfLinesFinals<T> extends Python3BaseVisitor<T>
                 visit(ctx.suite(ctx.ELIF().size()+1).stmt(i));
         }
         else if((ctx.ELSE() != null)){
-            line = ((TerminalNodeImpl) ctx.ELSE()).symbol.getLine() + 1 ;
+            line = ((TerminalNodeImpl) ctx.ELSE()).symbol.getLine();
         }
 
+        line = line  - same_final_lines;
         this.delete_blocks++;
-        for(int i = 0; i<same_final_lines; i++){
-            visit(ctx.suite(ctx.ELIF().size()+1).stmt(ctx.suite(ctx.ELIF().size()+1).stmt().size()-i-1));
+        for(int i = same_final_lines; i>0; i--){
+            visit(ctx.suite(ctx.ELIF().size()+1).stmt(ctx.suite(ctx.ELIF().size()+1).stmt().size()-i));
         }
         this.delete_blocks--;
 
@@ -144,6 +146,7 @@ public class VisitorDuplicatedCodeIfLinesFinals<T> extends Python3BaseVisitor<T>
         return null;
 
     }
+
 
     @Override public T visitWhile_stmt(Python3Parser.While_stmtContext ctx) {
         boolean print = true;

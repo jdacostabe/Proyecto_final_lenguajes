@@ -16,11 +16,13 @@ public class Refactor {
         this.file_name = file_name;
         this.smellers = new ArrayList<>();
         this.smellers.add(new SmellUselessVariables());
-        //this.smellers.add(new SmellDuplicatedCodeIfBlock());
-        //this.smellers.add(new SmellDuplicatedCodeIfLinesInitials());
-        //this.smellers.add(new SmellDuplicatedCodeIfLinesFinals());
-        //this.smellers.add(new SmellDuplicatedCodeIfBlock());
-        //this.smellers.add(new SmellUselessVariables());
+        this.smellers.add(new SmellDuplicatedCodeIfBlock());
+        this.smellers.add(new SmellDuplicatedCodeIfLinesInitials());
+        this.smellers.add(new SmellDuplicatedCodeIfLinesFinals());
+        this.smellers.add(new SmellDuplicatedCodeIfBlock());
+        this.smellers.add(new SmellUselessVariables());
+        //this.smellers.add(new SmellUselessParameters());
+
     }
 
     public void codeRefactor() throws IOException {
@@ -33,6 +35,8 @@ public class Refactor {
             ParseTree tree = parser.file_input();
 
             String refactored_code = smeller.fix(tree);
+
+
 
             try {
                 File f = new File(file_name);

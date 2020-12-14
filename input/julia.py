@@ -1,8 +1,27 @@
 a,b=2,3
 
-print(b)
-if (a>2):
-    if (a>2):
-        print(b*2)
-elif ((True)and(False)):
-    print(b*2)
+if (b>2):
+    print(a)
+    print(c)
+    print(d)
+    print(d)
+    print(d)
+
+elif(s>11):
+    print(a)
+    print(c)
+    print(d)
+    print(d)
+    print(d)
+else:
+    print(a)
+    print(d)
+    print(d)
+    print(d)
+    print(d)
+
+
+
+print(x)
+
+
