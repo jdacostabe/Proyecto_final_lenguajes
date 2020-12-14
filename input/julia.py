@@ -1,13 +1,8 @@
-a,d=2,3
-b=c
-c=23
-c=12
-print(a)
-a=2
-a=1
-d=2
-d=12
+a,b=2,3
 
-
-
-
+print(b)
+if (a>2):
+    if (a>2):
+        print(b*2)
+elif ((True)and(False)):
+    print(b*2)

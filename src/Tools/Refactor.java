@@ -1,14 +1,11 @@
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class Refactor {
 
@@ -19,7 +16,11 @@ public class Refactor {
         this.file_name = file_name;
         this.smellers = new ArrayList<>();
         this.smellers.add(new SmellUselessVariables());
-
+        //this.smellers.add(new SmellDuplicatedCodeIfBlock());
+        //this.smellers.add(new SmellDuplicatedCodeIfLinesInitials());
+        //this.smellers.add(new SmellDuplicatedCodeIfLinesFinals());
+        //this.smellers.add(new SmellDuplicatedCodeIfBlock());
+        //this.smellers.add(new SmellUselessVariables());
     }
 
     public void codeRefactor() throws IOException {
@@ -33,18 +34,22 @@ public class Refactor {
 
             String refactored_code = smeller.fix(tree);
 
-            System.out.println(refactored_code);
+            try {
+                File f = new File(file_name);
+                FileWriter writer = new FileWriter(f);
+                writer.write(refactored_code);
+                writer.flush();
+                writer.close();
+            }catch(IOException e){
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
+
+
         }
 
 
 
-//        try {
-//            FileWriter writer = new FileWriter(file_name);
-//            writer.write(final_text);
-//            writer.close();
-//        }catch(IOException e){
-//            System.out.println("An error occurred.");
-//            e.printStackTrace();
-//        }
+
     }
 }

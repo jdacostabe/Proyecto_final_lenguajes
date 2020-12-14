@@ -36,12 +36,12 @@ public class VisitorCodeWithoutVaribleAsignations<T> extends Python3BaseVisitor<
         }
 
         if( ctx.simple_stmt() != null &&
-            ctx.simple_stmt().small_stmt() != null &&
-            ctx.simple_stmt().small_stmt().get(0) != null &&
-            ctx.simple_stmt().small_stmt().get(0).expr_stmt() != null && (
-            ctx.simple_stmt().small_stmt().get(0).expr_stmt().ASSIGN().size() > 0 ||
-            ctx.simple_stmt().small_stmt().get(0).expr_stmt().augassign() != null )
-          ){
+                ctx.simple_stmt().small_stmt() != null &&
+                ctx.simple_stmt().small_stmt().get(0) != null &&
+                ctx.simple_stmt().small_stmt().get(0).expr_stmt() != null && (
+                ctx.simple_stmt().small_stmt().get(0).expr_stmt().ASSIGN().size() > 0 ||
+                        ctx.simple_stmt().small_stmt().get(0).expr_stmt().augassign() != null )
+        ){
             Python3Parser.Expr_stmtContext expr_stmtContext = ctx.simple_stmt().small_stmt().get(0).expr_stmt();
             Python3Parser.Testlist_star_exprContext variable_list = expr_stmtContext.testlist_star_expr(0);
 
