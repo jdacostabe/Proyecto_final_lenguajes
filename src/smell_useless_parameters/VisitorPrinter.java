@@ -135,8 +135,6 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
                     for (int i=0; i<variable_list.test().size(); i++) {
                         Python3Parser.TestContext variable_in_expre = variable_list.test(i);
 
-                        System.out.println(ctx.getText() + " " + actual_parameters_useless + " " + actual_variables_useless);
-
                         if(this.actual_parameters_useless.size()!=0 && this.used_parameters.get(this.actual_function).get(variable_in_expre.getText())!=null && this.used_parameters.get(this.actual_function).get(variable_in_expre.getText()) > 0){
                             if(!actual_parameters_useless.contains(variable_in_expre.getText())){
                                 left_part = (left_part.equals("")) ? variable_in_expre.getText() : left_part+","+variable_in_expre.getText();
@@ -184,7 +182,7 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
 
                     if(!left_part.equals("")){
                         line_text="";
-                        final_text = final_text + indent + left_part + center_part + right_part +"\n";
+                        final_text = final_text + "\n"+indent + left_part + center_part + right_part +"\n";
                     }
                     line++;
 
@@ -193,6 +191,8 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
                     line++;
                     print_code(ctx);
                     final_text = final_text + "\n";
+
+
                 }
             }else{
                 print_code(ctx);
