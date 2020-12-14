@@ -12,6 +12,7 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
     HashMap<String, HashMap<String,Integer>> used_parameters;
     HashMap<String,ArrayList<String>> variables_not_used;
     HashMap<String, HashMap<String,Integer>> used_variables;
+    ArrayList<String> all_parameters;
 
     ParseTree tree;
     String final_text;
@@ -23,14 +24,14 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
     String line_text;
     int line;
     String indent;
-    boolean inCompound;
 
 
-    public VisitorPrinter(ParseTree tree, HashMap<String,ArrayList<Integer>> parameters_not_used, HashMap<String, HashMap<String,Integer>> used_parameters, HashMap<String,ArrayList<String>> variables_not_used, HashMap<String, HashMap<String,Integer>> used_variables){
+    public VisitorPrinter(ParseTree tree, HashMap<String,ArrayList<Integer>> parameters_not_used, HashMap<String, HashMap<String,Integer>> used_parameters, HashMap<String,ArrayList<String>> variables_not_used, HashMap<String, HashMap<String,Integer>> used_variables, ArrayList<String> all_parameters){
         this.parameters_not_used = parameters_not_used;
         this.used_parameters = used_parameters;
         this.variables_not_used = variables_not_used;
         this.used_variables = used_variables;
+        this.all_parameters = all_parameters;
 
         this.tree = tree;
         this.final_text = "";
@@ -84,6 +85,7 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
             }
             this.final_text = this.final_text.substring(0, this.final_text.length() - 2);
         }
+
         this.final_text = this.final_text + "):\n";
 
         this.indent = this.indent+"    ";
@@ -102,26 +104,19 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
                 //Se inicializan los parámetros inútiles de la función (Se buscan por indice y se guardan sus nombres)
                 ArrayList<Integer> parameter_indexes = parameters_not_used.get(this.actual_function);
                 this.actual_parameters_useless = new ArrayList<>();
-                var ref = new Object() {
-                    int iterator = 0;
-                };
 
-                parameters_not_used.forEach((key, value) -> {
-                    if(parameter_indexes.contains(ref.iterator))
-                        actual_parameters_useless.add(key);
-                    ref.iterator++;
-                });
+                for(Integer value : parameter_indexes){
+                    actual_parameters_useless.add(this.all_parameters.get(value));
+                }
 
                 //Se inicializan las variables inútiles de la función
                 this.actual_variables_useless = new ArrayList<>(variables_not_used.get(this.actual_function));
-
                 visitChildren(ctx);
                 this.actual_function = "";
             }else{
                 return visitChildren(ctx);
             }
         }else if(!this.actual_function.equals("")){
-
             if( ctx.simple_stmt() != null &&
                 ctx.simple_stmt().small_stmt() != null &&
                 ctx.simple_stmt().small_stmt().get(0) != null &&
@@ -137,13 +132,11 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
                     String center_part = (ctx.simple_stmt().small_stmt().get(0).expr_stmt().augassign() != null) ? ctx.simple_stmt().small_stmt().get(0).expr_stmt().augassign().getText() : "=";
                     String right_part = "";
 
-
                     for (int i=0; i<variable_list.test().size(); i++) {
                         Python3Parser.TestContext variable_in_expre = variable_list.test(i);
 
-                        if(this.actual_parameters_useless.size()!=0){
-
-                            if(!actual_parameters_useless.contains(variable_in_expre.getText()) && this.used_parameters.get(this.actual_function).get(variable_in_expre.getText()) > 0){
+                        if(this.actual_parameters_useless.size()!=0 && this.used_parameters.get(this.actual_function).get(variable_in_expre.getText())!=null && this.used_parameters.get(this.actual_function).get(variable_in_expre.getText()) > 0){
+                            if(!actual_parameters_useless.contains(variable_in_expre.getText())){
                                 left_part = (left_part.equals("")) ? variable_in_expre.getText() : left_part+","+variable_in_expre.getText();
 
                                 if(center_part.equals("=")){
@@ -154,12 +147,14 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
                             }
 
                             if(this.used_parameters.get(this.actual_function).get(variable_in_expre.getText()) != null){
+                                if(this.used_parameters.get(this.actual_function).get(variable_in_expre.getText())-1 == 0){
+                                    actual_parameters_useless.remove(variable_in_expre.getText());
+                                }
                                 this.used_parameters.get(this.actual_function).replace(variable_in_expre.getText(), this.used_parameters.get(this.actual_function).get(variable_in_expre.getText())-1);
                             }
 
-                        }else if(this.actual_variables_useless.size()!=0){
-
-                            if(!actual_variables_useless.contains(variable_in_expre.getText()) && this.used_variables.get(this.actual_function).get(variable_in_expre.getText()) > 0){
+                        }else if(this.actual_variables_useless.size()!=0 && this.used_parameters.get(this.actual_function).get(variable_in_expre.getText())!=null && this.used_variables.get(this.actual_function).get(variable_in_expre.getText()) > 0){
+                            if(!actual_variables_useless.contains(variable_in_expre.getText())){
                                 left_part = (left_part.equals("")) ? variable_in_expre.getText() : left_part+","+variable_in_expre.getText();
 
                                 if(center_part.equals("=")){
@@ -170,9 +165,18 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
                             }
 
                             if(this.used_variables.get(this.actual_function).get(variable_in_expre.getText()) != null){
+                                if(this.used_variables.get(this.actual_function).get(variable_in_expre.getText())-1 == 0){
+                                    actual_variables_useless.remove(variable_in_expre.getText());
+                                }
                                 this.used_variables.get(this.actual_function).replace(variable_in_expre.getText(), this.used_variables.get(this.actual_function).get(variable_in_expre.getText())-1);
                             }
-
+                        }else{
+                            left_part = (left_part.equals("")) ? variable_in_expre.getText() : left_part+","+variable_in_expre.getText();
+                            if(center_part.equals("=")){
+                                right_part = (right_part.equals("")) ? expr_stmtContext.testlist_star_expr(1).test(i).getText() : right_part + "," + expr_stmtContext.testlist_star_expr(1).test(i).getText();
+                            }else{
+                                right_part = (right_part.equals("")) ? expr_stmtContext.testlist().test(i).getText() : right_part + "," + expr_stmtContext.testlist().test(i).getText();
+                            }
                         }
                     }
 
@@ -183,15 +187,14 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
                     line++;
 
                 }else{
-                    final_text = final_text + indent;
+                    //final_text = final_text + indent;
+                    line++;
                     print_code(ctx);
+                    final_text = final_text + "\n";
                 }
             }else{
-                if(!indent.equals("")){
-                    final_text = final_text + indent + ctx.getText().trim() + "\n";
-                }else{
-                    print_code(ctx);
-                }
+                System.out.println("Interno, pero no es nada:" + ctx.getText()); //--------------------------------------------------------------------------
+                print_code(ctx);
             }
         }else{
             if(ctx.getText().trim().substring(ctx.getText().trim().length()-1, ctx.getText().trim().length()).equals(")")){
@@ -218,7 +221,7 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
                 int column_terminal = terminalNode.symbol.getCharPositionInLine();
 
                 if(line < line_terminal){
-                    final_text = final_text + line_text + "\n";
+                    final_text = (line_text.trim().equals(""))? final_text : final_text + line_text + "\n";
                     final_text = (line+1 == line_terminal)? final_text : final_text + "\n";
                     line_text="";
                     line=line_terminal;

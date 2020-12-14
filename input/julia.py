@@ -1,27 +1,10 @@
-a,b=2,3
+def example(a,b,c):
+    c = a+b
+    a = a
+    return c
 
-if (b>2):
-    print(a)
-    print(c)
-    print(d)
-    print(d)
-    print(d)
-
-elif(s>11):
-    print(a)
-    print(c)
-    print(d)
-    print(d)
-    print(d)
-else:
-    print(a)
-    print(d)
-    print(d)
-    print(d)
-    print(d)
-
-
-
-print(x)
-
+a = example(1,2,3)
+b = example(4,5,6)
+print(a)
+print(b)
 
