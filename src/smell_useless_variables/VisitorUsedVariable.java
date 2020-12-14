@@ -22,6 +22,10 @@ public class VisitorUsedVariable<T> extends Python3BaseVisitor<T> {
         this.visit(this.tree);
     }
 
+    @Override public T visitFuncdef(Python3Parser.FuncdefContext ctx) {
+        return null;
+    }
+
 
     @Override public T visitAtom(Python3Parser.AtomContext ctx) {
         if(ctx.NAME() != null && ctx.getText().equals(this.variable_name)){
