@@ -15,7 +15,8 @@ public class Refactor {
     Refactor(String file_name){
         this.file_name = file_name;
         this.smellers = new ArrayList<>();
-        this.smellers.add(new SmellUselessVariables());
+//        this.smellers.add(new SmellUselessVariables());
+        this.smellers.add(new SmellUselessParameters());
         //this.smellers.add(new SmellDuplicatedCodeIfBlock());
         //this.smellers.add(new SmellDuplicatedCodeIfLinesInitials());
         //this.smellers.add(new SmellDuplicatedCodeIfLinesFinals());
@@ -34,16 +35,18 @@ public class Refactor {
 
             String refactored_code = smeller.fix(tree);
 
-            try {
-                File f = new File(file_name);
-                FileWriter writer = new FileWriter(f);
-                writer.write(refactored_code);
-                writer.flush();
-                writer.close();
-            }catch(IOException e){
-                System.out.println("An error occurred.");
-                e.printStackTrace();
-            }
+            System.out.println(refactored_code);
+
+//            try {
+//                File f = new File(file_name);
+//                FileWriter writer = new FileWriter(f);
+//                writer.write(refactored_code);
+//                writer.flush();
+//                writer.close();
+//            }catch(IOException e){
+//                System.out.println("An error occurred.");
+//                e.printStackTrace();
+//            }
 
 
         }

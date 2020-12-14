@@ -1,8 +1,10 @@
-a,b=2,3
+def example(a,b,c):
+  a = 3
+  b = 4
+  c = a+b+c
+  d = a+c
+  return c
 
-print(b)
-if (a>2):
-    if (a>2):
-        print(b*2)
-elif ((True)and(False)):
-    print(b*2)
+example(1,2,3)
+example(4,5,6)
+

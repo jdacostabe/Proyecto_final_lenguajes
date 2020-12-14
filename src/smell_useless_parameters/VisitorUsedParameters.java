@@ -81,7 +81,6 @@ public class VisitorUsedParameters<T> extends Python3BaseVisitor<T>  {
         for (int i=0; i<ruleContext.getChildCount(); i++) {
             if(ruleContext.getChild(i).getClass().equals(TerminalNodeImpl.class)){
                 res = res || ruleContext.getChild(i).getText().equals(variable_name);
-                break;
             }
             else {
                 res = res || on_right((ParserRuleContext) ruleContext.getChild(i));

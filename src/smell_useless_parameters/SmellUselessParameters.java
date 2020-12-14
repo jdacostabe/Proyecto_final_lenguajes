@@ -13,6 +13,7 @@ public class SmellUselessParameters implements Smeller {
         HashMap<String, HashMap<String,Integer>> used_parameters = new HashMap<>();
         HashMap<String,ArrayList<String>> variables_not_used = new HashMap<>();
         HashMap<String, HashMap<String,Integer>> used_variables = new HashMap<>();
+        ArrayList<String> all_parameters = new ArrayList<>();
 
         find_functions.parameters.forEach((key, value) -> {
             HashMap<String,Integer> used = new HashMap<>();
@@ -21,6 +22,7 @@ public class SmellUselessParameters implements Smeller {
                 VisitorUsedParameters used_parameter = new VisitorUsedParameters(tree, parameter, key.toString());
                 if(!used_parameter.is_used)
                     parameters.add(((ArrayList<String>) value).indexOf(parameter));
+                all_parameters.add(parameter);
                 used.put(parameter,used_parameter.valid_uses);
             }
             used_parameters.put((String) key, used);
@@ -30,6 +32,13 @@ public class SmellUselessParameters implements Smeller {
 
 //        parameters_not_used.forEach((key, value) -> {
 //            System.out.println("Función: "+key+", Parametros: "+value.toString());;
+//        });
+
+//        used_parameters.forEach((key1, value1) -> {
+//            System.out.println("Función: "+key1);
+//            value1.forEach((key2, value2) -> {
+//                System.out.println("Variable: "+key2+", Numero de usos: "+value2.toString());;
+//            });
 //        });
 
         find_functions.internal_variables.forEach((key, value) -> {
@@ -49,13 +58,11 @@ public class SmellUselessParameters implements Smeller {
 //            System.out.println("Función: "+key+", Variables: "+value.toString());;
 //        });
 
-        VisitorPrinter final_text = new VisitorPrinter(tree, parameters_not_used, used_parameters, variables_not_used, used_variables);
-
-        System.out.println(final_text.final_text);
+        VisitorPrinter final_text = new VisitorPrinter(tree, parameters_not_used, used_parameters, variables_not_used, used_variables, all_parameters);
 
 //        VisitorCodeWithoutVaribleAsignations final_text = new VisitorCodeWithoutVaribleAsignations(tree,variables_not_used, used_definitions);
 
 
-        return "\nFIN PROVISIONAL";
+        return final_text.final_text;
     }
 }
