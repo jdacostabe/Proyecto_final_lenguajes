@@ -1,0 +1,12 @@
+estudiante_1 ="Camilo"
+estudiante_1 = estudiante_1
+
+estudiante_2 ="Julian"
+estudiante_3 ="David"
+
+tarea_1,tarea_2,tarea_3 ="Imprimir Codigo", "Documentacion", "Presentacion"
+
+print(estudiante_1 + ": " +tarea_1)
+print(estudiante_3 + ": " +tarea_3)
+
+estudiante_3="Carlos David"
