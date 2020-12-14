@@ -89,6 +89,7 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
         this.final_text = this.final_text + "):\n";
 
         this.indent = this.indent+"    ";
+        visitChildren(ctx.suite());
         this.indent = this.indent.substring(0,this.indent.length()-4);
 
         return null;
@@ -116,7 +117,6 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
                 return visitChildren(ctx);
             }
         }else if(!this.actual_function.equals("")){
-            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             if( ctx.simple_stmt() != null &&
                 ctx.simple_stmt().small_stmt() != null &&
                 ctx.simple_stmt().small_stmt().get(0) != null &&
@@ -135,9 +135,8 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
                     for (int i=0; i<variable_list.test().size(); i++) {
                         Python3Parser.TestContext variable_in_expre = variable_list.test(i);
 
-                        System.out.println(ctx.getText());
-                        if(this.actual_parameters_useless.size()!=0 && this.used_parameters.get(this.actual_function).get(variable_in_expre.getText())!=null){
-                            if(!actual_parameters_useless.contains(variable_in_expre.getText()) && this.used_parameters.get(this.actual_function).get(variable_in_expre.getText()) > 0){
+                        if(this.actual_parameters_useless.size()!=0 && this.used_parameters.get(this.actual_function).get(variable_in_expre.getText())!=null && this.used_parameters.get(this.actual_function).get(variable_in_expre.getText()) > 0){
+                            if(!actual_parameters_useless.contains(variable_in_expre.getText())){
                                 left_part = (left_part.equals("")) ? variable_in_expre.getText() : left_part+","+variable_in_expre.getText();
 
                                 if(center_part.equals("=")){
@@ -149,15 +148,13 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
 
                             if(this.used_parameters.get(this.actual_function).get(variable_in_expre.getText()) != null){
                                 if(this.used_parameters.get(this.actual_function).get(variable_in_expre.getText())-1 == 0){
-                                    System.out.println("????");
                                     actual_parameters_useless.remove(variable_in_expre.getText());
                                 }
                                 this.used_parameters.get(this.actual_function).replace(variable_in_expre.getText(), this.used_parameters.get(this.actual_function).get(variable_in_expre.getText())-1);
                             }
 
-                        }else if(this.actual_variables_useless.size()!=0 && this.used_parameters.get(this.actual_function).get(variable_in_expre.getText())!=null){
-                            if(!actual_variables_useless.contains(variable_in_expre.getText()) && this.used_variables.get(this.actual_function).get(variable_in_expre.getText()) > 0){
-                                System.out.println(ctx.getText());
+                        }else if(this.actual_variables_useless.size()!=0 && this.used_parameters.get(this.actual_function).get(variable_in_expre.getText())!=null && this.used_variables.get(this.actual_function).get(variable_in_expre.getText()) > 0){
+                            if(!actual_variables_useless.contains(variable_in_expre.getText())){
                                 left_part = (left_part.equals("")) ? variable_in_expre.getText() : left_part+","+variable_in_expre.getText();
 
                                 if(center_part.equals("=")){
@@ -173,7 +170,13 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
                                 }
                                 this.used_variables.get(this.actual_function).replace(variable_in_expre.getText(), this.used_variables.get(this.actual_function).get(variable_in_expre.getText())-1);
                             }
-
+                        }else{
+                            left_part = (left_part.equals("")) ? variable_in_expre.getText() : left_part+","+variable_in_expre.getText();
+                            if(center_part.equals("=")){
+                                right_part = (right_part.equals("")) ? expr_stmtContext.testlist_star_expr(1).test(i).getText() : right_part + "," + expr_stmtContext.testlist_star_expr(1).test(i).getText();
+                            }else{
+                                right_part = (right_part.equals("")) ? expr_stmtContext.testlist().test(i).getText() : right_part + "," + expr_stmtContext.testlist().test(i).getText();
+                            }
                         }
                     }
 
@@ -184,14 +187,14 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
                     line++;
 
                 }else{
-                    final_text = final_text + indent;
+                    //final_text = final_text + indent;
+                    line++;
                     print_code(ctx);
                     final_text = final_text + "\n";
                 }
             }else{
-                line++;
+                System.out.println("Interno, pero no es nada:" + ctx.getText()); //--------------------------------------------------------------------------
                 print_code(ctx);
-                final_text = final_text + "\n";
             }
         }else{
             if(ctx.getText().trim().substring(ctx.getText().trim().length()-1, ctx.getText().trim().length()).equals(")")){
@@ -218,7 +221,7 @@ public class VisitorPrinter<T> extends Python3BaseVisitor<T> {
                 int column_terminal = terminalNode.symbol.getCharPositionInLine();
 
                 if(line < line_terminal){
-                    final_text = final_text + line_text + "\n";
+                    final_text = (line_text.trim().equals(""))? final_text : final_text + line_text + "\n";
                     final_text = (line+1 == line_terminal)? final_text : final_text + "\n";
                     line_text="";
                     line=line_terminal;
